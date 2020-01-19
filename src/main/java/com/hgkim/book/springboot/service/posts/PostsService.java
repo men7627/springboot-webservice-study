@@ -29,7 +29,7 @@ public class PostsService {
     @Transactional
     public Long update(Long id, PostsUpdateRequestDto requestDto) {
         Posts posts = postsRepository.findById(id)
-                .orElseThrow(() -> new NotFoundAuthorException(id));
+                .orElseThrow(() -> new NotFoundPostsException(id));
 
         posts.update(requestDto.getTitle(), requestDto.getContent());
 
@@ -39,7 +39,7 @@ public class PostsService {
     @Transactional(readOnly = true)
     public PostsResponseDto findById(Long id) {
         Posts entity = postsRepository.findById(id)
-                .orElseThrow(() -> new NotFoundAuthorException(id));
+                .orElseThrow(() -> new NotFoundPostsException(id));
 
         return new PostsResponseDto(entity);
     }
