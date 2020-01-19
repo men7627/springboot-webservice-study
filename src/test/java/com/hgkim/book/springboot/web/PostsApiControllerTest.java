@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -124,5 +125,25 @@ public class PostsApiControllerTest {
         assertThat(responseEntity.getBody().getTitle()).isEqualTo("title");
         assertThat(responseEntity.getBody().getContent()).isEqualTo("content");
         assertThat(responseEntity.getBody().getAuthor()).isEqualTo("author");
+    }
+
+    @Test
+    public void Posts_삭제하다() {
+        //given
+        Posts savedPosts = postsRepository.save(Posts.builder()
+                .title("title")
+                .content("content")
+                .author("author")
+                .build());
+
+        Long savedId = savedPosts.getId();
+
+        String url = "http://localhost:" + port + "/api/v1/posts/" + savedId;
+
+        //when
+        restTemplate.delete(url);
+
+        //then
+        assertThat(postsRepository.findById(savedId)).isEmpty();
     }
 }
