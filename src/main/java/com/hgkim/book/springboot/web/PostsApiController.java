@@ -4,16 +4,14 @@ import com.hgkim.book.springboot.service.posts.PostsService;
 import com.hgkim.book.springboot.web.dto.PostsResponseDto;
 import com.hgkim.book.springboot.web.dto.PostsSaveRequestDto;
 import com.hgkim.book.springboot.web.dto.PostsUpdateRequestDto;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+@RequiredArgsConstructor
 @RestController
 public class PostsApiController {
 
     private final PostsService postsService;
-
-    public PostsApiController(final PostsService postsService) {
-        this.postsService = postsService;
-    }
 
     @PostMapping("/api/v1/posts")
     public Long save(@RequestBody PostsSaveRequestDto requestDto) {
@@ -29,5 +27,4 @@ public class PostsApiController {
     public PostsResponseDto findById(@PathVariable Long id) {
         return postsService.findById(id);
     }
-
 }
