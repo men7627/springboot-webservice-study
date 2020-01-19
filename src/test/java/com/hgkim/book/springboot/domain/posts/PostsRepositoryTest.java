@@ -1,6 +1,5 @@
 package com.hgkim.book.springboot.domain.posts;
 
-import com.hgkim.book.springboot.service.posts.NotFoundAuthorException;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
