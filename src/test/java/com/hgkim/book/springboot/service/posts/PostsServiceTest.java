@@ -12,8 +12,7 @@ import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.swing.text.html.Option;
-
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -107,5 +106,44 @@ public class PostsServiceTest {
 
         //Act & Assert
         postsService.findById(2L);
+    }
+
+    @Test
+    public void findAllDesc() {
+        //Arrange
+        List postsList = mock(List.class);
+
+        given(postsRepository.findAllByOrderByIdDesc()).willReturn(postsList);
+
+        //Act
+        postsList = postsService.findAllDesc();
+
+        //Assert
+        verify(postsRepository).findAllByOrderByIdDesc();
+    }
+
+    @Test
+    public void delete() {
+        //Arrange
+        Posts posts = mock(Posts.class);
+
+        given(postsRepository.findById(1L)).willReturn(Optional.of(posts));
+
+        //Act
+        postsService.delete(1L);
+
+        //Assert
+        verify(postsRepository).delete(posts);
+    }
+
+    @Test(expected = NotFoundPostsException.class)
+    public void delete_존재하지_않는_게시글() {
+        //Arrange
+        Posts posts = mock(Posts.class);
+
+        given(postsRepository.findById(1L)).willReturn(Optional.of(posts));
+
+        //Act & Assert
+        postsService.delete(2L);
     }
 }
