@@ -17,7 +17,7 @@ script: "./gradlew clean build"
 before_deploy:
   - zip -r springboot-webservice-study *
   - mkdir -p deploy
-  - mv springboot-webservice-study.zip deploy/springboot-webservice.study.zip
+  - mv springboot-webservice-study.zip deploy/springboot-webservice-study.zip
 
 deploy:
   - provider: s3
@@ -28,6 +28,17 @@ deploy:
     skip_cleanup: true
     acl: private
     local_dir: deploy
+    wait-until-deployed: true
+
+  - provider: codedeploy
+    access_key_id: $AWS_ACCESS_KEY
+    secret_access_key: $AWS_SECRET_KEY
+    bucket: springboot-service-study
+    key: springboot-webservice-study.zip
+    bundle_type: zip
+    application: springboot-service-study
+    deployment_group: springboot-service-study-group
+    region: ap-northeast-2
     wait-until-deployed: true
 
 # CI 실행 완료 시 메일로 알림
