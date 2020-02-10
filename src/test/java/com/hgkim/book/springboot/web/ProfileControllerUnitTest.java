@@ -1,7 +1,6 @@
 package com.hgkim.book.springboot.web;
 
 import org.junit.Test;
-import org.mockito.Mock;
 import org.springframework.mock.env.MockEnvironment;
 
 import static org.assertj.core.api.Assertions.assertThat;
