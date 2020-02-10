@@ -1,61 +1,34 @@
 package com.hgkim.book.springboot.web;
 
 import org.junit.Test;
-import org.mockito.Mock;
-import org.springframework.mock.env.MockEnvironment;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@RunWith(SpringRunner.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ProfileControllerTest {
 
-    @Test
-    public void real_profile_조회된다() {
-        //given
-        String expectedProfile = "real";
-        MockEnvironment env = new MockEnvironment();
-        env.addActiveProfile(expectedProfile);
-        env.addActiveProfile("oauth");
-        env.addActiveProfile("real-db");
+    @LocalServerPort
+    private int port;
 
-        ProfileController controller = new ProfileController(env);
-
-        //when
-        String profile = controller.profile();
-
-        //then
-        assertThat(profile).isEqualTo(expectedProfile);
-    }
+    @Autowired
+    private TestRestTemplate testRestTemplate;
 
     @Test
-    public void real_profile이_없으면_첫_번째가_조회된다() {
-        //given
-        String expectedProfile = "oauth";
-        MockEnvironment env = new MockEnvironment();
+    public void profile_인증없이_호출() {
+        String expected = "default";
 
-        env.addActiveProfile(expectedProfile);
-        env.addActiveProfile("real-db");
+        ResponseEntity<String> response = testRestTemplate.getForEntity("/profile", String.class);
 
-        ProfileController controller = new ProfileController(env);
-
-        //when
-        String profile = controller.profile();
-
-        //then
-        assertThat(profile).isEqualTo(expectedProfile);
-    }
-
-    @Test
-    public void active_profile_없으면_defalt_조회된다() {
-        //given
-        String expectedProfile = "default";
-        MockEnvironment env = new MockEnvironment();
-
-        ProfileController controller = new ProfileController(env);
-
-        //when
-        String profile = controller.profile();
-
-        //then
-        assertThat(profile).isEqualTo(expectedProfile);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).isEqualTo(expected);
     }
 }
