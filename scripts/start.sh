@@ -9,7 +9,7 @@ REPOSITORY=/home/ec2-user/app/step3
 PROJECT_NAME=springboot-webservice-study
 
 echo "> Build 파일 복사"
-JAR_NAME=$(ls -tr $REPOSITORY/*.jar | tail -n 1)
+JAR_NAME=$(ls -tr $REPOSITORY/zip/*.jar | tail -n 1)
 
 echo "> JAR Name: $JAR_NAME"
 
